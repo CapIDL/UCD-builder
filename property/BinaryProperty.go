@@ -44,7 +44,7 @@ func (bp *BinaryProperty) AddCodePoint(r rune) {
 	bp.CodePoints[r] = true
 }
 
-func (bp *BinaryProperty) ToRangeTable() unicode.RangeTable {
+func (bp *BinaryProperty) ToRangeTable() *unicode.RangeTable {
 	var LatinOffset int
 
 	rl16 := []unicode.Range16{}
@@ -114,7 +114,7 @@ func (bp *BinaryProperty) ToRangeTable() unicode.RangeTable {
 		rl32 = append(rl32, r32)
 	}
 
-	return unicode.RangeTable{
+	return &unicode.RangeTable{
 		R16:         rl16,
 		R32:         rl32,
 		LatinOffset: LatinOffset,
@@ -132,7 +132,7 @@ func (bp *BinaryProperty) PrintTo(out io.Writer) {
 
 	rt := bp.ToRangeTable()
 
-	fmt.Fprintf(out, "var %s unicode.RangeTable = {\n", bp.Name)
+	fmt.Fprintf(out, "var %s = &unicode.RangeTable{\n", bp.Name)
 	fmt.Fprintf(out, "  R16: []unicode.Range16{ /* %d */", len(rt.R16))
 	for _, r := range rt.R16 {
 		fmt.Fprintf(out, "\n    unicode.Range16{Lo: %04X, Hi: %04X, Stride: %d },",
