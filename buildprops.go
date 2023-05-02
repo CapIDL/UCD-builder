@@ -206,22 +206,22 @@ func main() {
 	// Properties
 	// ------------------------------------------------------------------------
 	props, _ = property.ParsePropertyFile(version, propsFile, 1)
-	basicProps := props
+	cumProps := props
 	props, _ = property.ParsePropertyFile(version, derivedPropsFile, 1)
 
-	for k, v := range basicProps {
-		props[k] = v
+	for k, v := range props {
+		cumProps[k] = v
 	}
-	basicProps = nil
+	props = nil
 
 	props, _ = property.ParsePropertyFile(version, emojiPropsFile, 1)
 
-	for k, v := range basicProps {
-		props[k] = v
+	for k, v := range props {
+		cumProps[k] = v
 	}
-	basicProps = nil
+	props = nil
 
-	PrintProps("property", outDir, props, "")
+	PrintProps("property", outDir, cumProps, "")
 	props = nil
 
 	os.Exit(0)
