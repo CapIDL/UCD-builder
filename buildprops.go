@@ -134,6 +134,9 @@ func main() {
 
 	var props map[string]*property.BinaryProperty
 
+	// ------------------------------------------------------------------------
+	// Scripts
+	// ------------------------------------------------------------------------
 	props, _ = property.ParsePropertyFile(version, scriptsFile, 1)
 	PrintProps("script", outDir, props, "")
 	props = nil
@@ -218,7 +221,7 @@ func main() {
 	}
 	basicProps = nil
 
-	PrintProps("property", outDir, props, tail)
+	PrintProps("property", outDir, props, "")
 	props = nil
 
 	os.Exit(0)
