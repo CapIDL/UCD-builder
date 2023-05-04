@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"sort"
 
 	"github.com/CapIDL/UCD-builder/flags"
 	"github.com/CapIDL/UCD-builder/property"
@@ -31,8 +32,14 @@ func PrintProps(packageName string, outDir string, props property.PropMap, tail 
 	fmt.Fprintf(f, "package %s\n", packageName)
 	fmt.Fprintf(f, "\nimport \"unicode\"\n")
 
-	for _, prop := range props {
-		prop.PrintTo(f)
+	names := make([]string, 0)
+	for nm := range props {
+		names = append(names, nm)
+	}
+	sort.Strings(names)
+
+	for _, nm := range names {
+		props[nm].PrintTo(f)
 	}
 
 	fmt.Fprint(f, tail)
