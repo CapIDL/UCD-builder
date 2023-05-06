@@ -3,7 +3,6 @@ package property
 import (
 	"bufio"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"os"
@@ -121,39 +120,7 @@ func (bp *BinaryProperty) ToRangeTable() *unicode.RangeTable {
 	}
 }
 
-func (bp *BinaryProperty) Print() {
-	bp.PrintTo(os.Stdout)
-}
-
 const useStride = true
-
-func (bp *BinaryProperty) PrintTo(out io.Writer) {
-	fmt.Fprintf(out, "\n// %s: %d codepoints\n", bp.Name, len(bp.CodePoints))
-
-	rt := bp.ToRangeTable()
-
-	fmt.Fprintf(out, "var %s = &unicode.RangeTable{\n", bp.Name)
-	fmt.Fprintf(out, "  R16: []unicode.Range16{ /* %d */", len(rt.R16))
-	for _, r := range rt.R16 {
-		fmt.Fprintf(out, "\n    unicode.Range16{Lo: 0x%04X, Hi: 0x%04X, Stride: %d },",
-			r.Lo, r.Hi, r.Stride)
-	}
-	if len(rt.R16) > 0 {
-		fmt.Fprintf(out, "\n  ")
-	}
-	fmt.Fprintf(out, "},\n")
-	fmt.Fprintf(out, "  R32: []unicode.Range32{ /* %d */", len(rt.R32))
-	for _, r := range rt.R32 {
-		fmt.Fprintf(out, "\n    unicode.Range32{Lo: 0x%06X, Hi: 0x%06X, Stride: %d },",
-			r.Lo, r.Hi, r.Stride)
-	}
-	if len(rt.R32) > 0 {
-		fmt.Fprintf(out, "\n  ")
-	}
-	fmt.Fprintf(out, "},\n")
-	fmt.Fprintf(out, "  LatinOffset: %d,\n", rt.LatinOffset)
-	fmt.Fprintf(out, "}\n")
-}
 
 type PropMap = map[string](*BinaryProperty)
 

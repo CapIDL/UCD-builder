@@ -6,10 +6,12 @@ import (
 
 var DataPath string
 var OutDir string
+var Lang string
 
 func ProcessFlags() {
 	flag.StringVarP(&DataPath, "data", "d", "", "path to unicode data tree for desired version")
 	flag.StringVarP(&OutDir, "out", "o", "out/", "path for output files")
+	flag.StringVarP(&Lang, "lamg", "l", "go", "target language name")
 	flag.Parse()
 }
 

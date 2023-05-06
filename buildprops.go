@@ -7,43 +7,11 @@ import (
 	"log"
 	"os"
 	"regexp"
-	"sort"
 
 	"github.com/CapIDL/UCD-builder/flags"
+	"github.com/CapIDL/UCD-builder/lang"
 	"github.com/CapIDL/UCD-builder/property"
 )
-
-func ShowNames(file string, nameCol int) {
-
-}
-
-func PrintProps(packageName string, outDir string, props property.PropMap, tail string) {
-	dirName := fmt.Sprintf("%s/%s", outDir, packageName)
-	fileName := fmt.Sprintf("%s/%s.go", dirName, packageName)
-	os.Mkdir(outDir, os.ModePerm)
-	os.Mkdir(dirName, os.ModePerm)
-
-	f, err := os.Create(fileName)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-
-	fmt.Fprintf(f, "package %s\n", packageName)
-	fmt.Fprintf(f, "\nimport \"unicode\"\n")
-
-	names := make([]string, 0)
-	for nm := range props {
-		names = append(names, nm)
-	}
-	sort.Strings(names)
-
-	for _, nm := range names {
-		props[nm].PrintTo(f)
-	}
-
-	fmt.Fprint(f, tail)
-}
 
 // From table 12 of UAX44
 type CatValue struct {
@@ -102,19 +70,23 @@ func main() {
 	flags.ProcessFlags()
 
 	if len(flags.Args()) != 2 {
-		fmt.Fprintf(os.Stderr, "Usage: digest <unicode version> <output directory> (%d)\n", len(flags.Args()))
-		os.Exit(-1)
+		log.Fatalf("Usage: digest <unicode version> <output directory> (%d)\n", len(flags.Args()))
 	}
 
 	version := flags.Arg(0)
 	matched, err := regexp.MatchString("[0-9]{1,2}(\\.[0-9]){2}", version)
 
 	if err != nil || !matched {
-		fmt.Fprintf(os.Stderr, "Unicode version number should be major.minor.update\n")
-		os.Exit(-1)
+		log.Fatalf("Unicode version number should be major.minor.update\n")
 	}
 
 	outDir := flags.Arg(1)
+
+	langName := flags.Lang
+	lang, ok := lang.Language[langName]
+	if !ok {
+		log.Fatalf("Unknown or unsupported output language \"%s\"\n", langName)
+	}
 
 	// ------------------------------------------------------------------------
 	// Scripts
@@ -145,7 +117,7 @@ func main() {
 	// Scripts
 	// ------------------------------------------------------------------------
 	props, _ = property.ParsePropertyFile(version, scriptsFile, 1)
-	PrintProps("script", outDir, props, "")
+	lang.PrintProps("script", outDir, props, "")
 	props = nil
 
 	// ------------------------------------------------------------------------
@@ -196,7 +168,7 @@ func main() {
 	}
 	tail = tail + "\n"
 
-	PrintProps("category", outDir, props, tail)
+	lang.PrintProps("category", outDir, props, tail)
 
 	props = nil
 
@@ -228,7 +200,7 @@ func main() {
 	}
 	props = nil
 
-	PrintProps("property", outDir, cumProps, "")
+	lang.PrintProps("property", outDir, cumProps, "")
 	props = nil
 
 	os.Exit(0)
