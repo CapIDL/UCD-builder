@@ -1,4 +1,4 @@
-module github.com/CapIDL/UCD-builder
+module github.com/PackratPlus/UCD-builder
 
 go 1.20
 
