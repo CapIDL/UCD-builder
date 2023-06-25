@@ -7,7 +7,7 @@ import (
 	"os"
 	"sort"
 
-	"github.com/CapIDL/UCD-builder/property"
+	"github.com/PackratPlus/UCD-builder/property"
 )
 
 func Go_PrintProps(packageName string, outDir string, props property.PropMap, tail string) {

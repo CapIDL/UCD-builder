@@ -8,9 +8,9 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/CapIDL/UCD-builder/flags"
-	"github.com/CapIDL/UCD-builder/lang"
-	"github.com/CapIDL/UCD-builder/property"
+	"github.com/PackratPlus/UCD-builder/flags"
+	"github.com/PackratPlus/UCD-builder/lang"
+	"github.com/PackratPlus/UCD-builder/property"
 )
 
 // From table 12 of UAX44

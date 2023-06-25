@@ -13,7 +13,7 @@ import (
 
 	"golang.org/x/exp/constraints"
 
-	"github.com/CapIDL/UCD-builder/flags"
+	"github.com/PackratPlus/UCD-builder/flags"
 )
 
 type BinaryProperty struct {

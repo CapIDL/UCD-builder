@@ -1,6 +1,6 @@
 package lang
 
-import "github.com/CapIDL/UCD-builder/property"
+import "github.com/PackratPlus/UCD-builder/property"
 
 type Lang struct {
 	Name string
